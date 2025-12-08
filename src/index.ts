@@ -28,9 +28,7 @@ app.use("/api/posters", posterRoutes);
 app.use("/api/genres", genreRoutes);
 app.use("/api/cartlines", cartlineRoutes);
 app.use("/api/ratings", ratingRoutes);
-
-// Base routes
-app.use("/login", loginRoutes);
+app.use("/api/login", loginRoutes);
 
 // Start serveren
 app.listen(port, () => {
