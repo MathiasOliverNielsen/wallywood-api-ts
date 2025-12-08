@@ -4,13 +4,14 @@ generator client {
 
 datasource db {
   provider = "mysql"
+  // Database Forbindelse URL (Old version)
   url = env("DATABASE_URL")
 }
 
 // Bruger roller
 enum Role {
-  admin
-  customer
+  USER
+  ADMIN
 }
 
 // Brugere
@@ -22,7 +23,7 @@ model User {
   password String
   role Role
   isActive Boolean @default(true)
-  createdAt DateTime
+  createdAt DateTime @default(now())
   
   cartlines Cartline[]
   userRatings UserRating[]
