@@ -1,0 +1,38 @@
+{
+  "name": "wallywood-api-ts",
+  "version": "1.0.0",
+  "description": "This is a school project",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:reset": "prisma migrate reset"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MathiasOliverNielsen/wallywood-api-ts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/MathiasOliverNielsen/wallywood-api-ts/issues"
+  },
+  "homepage": "https://github.com/MathiasOliverNielsen/wallywood-api-ts#readme",
+  "dependencies": {
+    "@prisma/client": "6.19",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.10.1",
+    "prisma": "6.19",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
