@@ -1,20 +1,17 @@
 import { Router } from "express";
-import { login, getUserProfile } from "../controllers/authController.js";
+import { login, refreshToken, logout, getUserProfile } from "../controllers/authController.js";
 import { authenticateToken } from "../middleware/authenticateToken.js";
 import { authorizeRole } from "../middleware/authorizeRole.js";
 
 const router = Router();
 
-// Subroutes til /login
-router.post("/", login);
+// Authentication routes
+router.post("/", login); // POST /api/login
+router.post("/refresh", refreshToken); // POST /api/login/refresh
+router.post("/logout", logout); // POST /api/login/logout
 
-// Beskyttet route - kræver gyldig token
-// Først kører authenticateToken (tjekker om token er gyldig)
-// Hvis token er OK, kører getUserProfile og returnerer brugerens data
-router.get("/authenticate", authenticateToken, getUserProfile);
-
-// Beskyttet route med rolle-autorisation - kun ADMIN adgang
-// Først authenticateToken (token validation), så authorizeRole (rolle check), så getUserProfile
-router.get("/authorize", authenticateToken, authorizeRole("ADMIN"), getUserProfile);
+// Beskyttet routes - kræver gyldig token
+router.get("/authenticate", authenticateToken, getUserProfile); // GET /api/login/authenticate
+router.get("/authorize", authenticateToken, authorizeRole("ADMIN"), getUserProfile); // GET /api/login/authorize
 
 export { router as loginRoutes };

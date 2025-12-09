@@ -36,12 +36,28 @@ async function cast(model: string, row: any) {
     const val = row[key]?.toString().trim();
     const type = types[key];
 
-    if (key === "password") out[key] = await bcrypt.hash(val, 10);
-    else if (type === "number") out[key] = Number(val);
-    else if (type === "boolean") out[key] = val !== "0";
-    else if (type === "date") out[key] = val ? new Date(val) : null;
-    else out[key] = val ?? null;
+    if (key === "password") {
+      out[key] = await bcrypt.hash(val, 10);
+    } else if (type === "number") {
+      out[key] = Number(val);
+    } else if (type === "boolean") {
+      out[key] = val !== "0";
+    } else if (type === "date") {
+      // Hvis værdien er tom eller undefined, lad Prisma håndtere @default(now())
+      if (val && val !== "") {
+        out[key] = new Date(val);
+      }
+      // Hvis tom, spring over så Prisma bruger default
+    } else {
+      out[key] = val ?? null;
+    }
   }
+
+  // Tilføj createdAt hvis den ikke findes og modellen har den
+  if (types.createdAt && !out.createdAt) {
+    out.createdAt = new Date();
+  }
+
   return out;
 }
 

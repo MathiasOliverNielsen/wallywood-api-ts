@@ -23,11 +23,33 @@ export const getCartlines = async (req: Request, res: Response) => {
 export const addToCart = async (req: Request, res: Response) => {
   try {
     const { userId, posterId, quantity } = req.body;
+
+    // Validate input
+    if (!userId || !posterId || !quantity) {
+      return res.status(400).json({
+        error: "Missing required fields",
+        required: ["userId", "posterId", "quantity"],
+        received: { userId, posterId, quantity },
+      });
+    }
+
+    // Check if user exists
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      return res.status(404).json({ error: `User with ID ${userId} not found` });
+    }
+
+    // Check if poster exists
+    const poster = await prisma.poster.findUnique({ where: { id: posterId } });
+    if (!poster) {
+      return res.status(404).json({ error: `Poster with ID ${posterId} not found` });
+    }
+
     const cartline = await prisma.cartline.create({
       data: {
-        userId,
-        posterId,
-        quantity,
+        userId: parseInt(userId),
+        posterId: parseInt(posterId),
+        quantity: parseInt(quantity),
         createdAt: new Date(),
       },
       include: {
@@ -37,8 +59,11 @@ export const addToCart = async (req: Request, res: Response) => {
     });
     res.status(201).json(cartline);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to add to cart" });
+    console.error("AddToCart Error:", error);
+    res.status(500).json({
+      error: "Failed to add to cart",
+      details: error instanceof Error ? error.message : "Unknown error",
+    });
   }
 };
 
