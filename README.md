@@ -38,12 +38,32 @@ prisma/
 
 ## Authentication
 
+### Refresh Token System
+
+- **Access tokens**: Kort levetid (15 minutter)
+- **Refresh tokens**: Langtids tokens gemt i database
+- **Automatisk fornyelse**: Få ny access token uden at logge ind igen
+- **Sikker logout**: Invalidér refresh token i database
+
 ### Login flow
 
 1. POST `/api/login` → få access + refresh tokens
-2. Brug access token i Authorization header
-3. POST `/api/login/refresh` → forny tokens
-4. POST `/api/login/logout` → log ud
+2. Brug access token i Authorization header (Bearer token)
+3. POST `/api/login/refresh` → forny tokens når access token udløber
+4. POST `/api/login/logout` → log ud og invalidér refresh token
+
+### Token format
+
+**Login response:**
+
+```json
+{
+  "message": "Login succesfuld",
+  "user": {...},
+  "accessToken": "eyJhbGciOi...",
+  "refreshToken": "a1b2c3d4e5f6..."
+}
+```
 
 ### Test brugere
 
