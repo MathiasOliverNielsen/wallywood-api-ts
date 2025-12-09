@@ -23,9 +23,9 @@ export const getGenres = async (req: Request, res: Response) => {
 // Hent enkelt genre
 export const getGenre = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { slug } = req.params;
     const genre = await prisma.genre.findUnique({
-      where: { id: parseInt(id) },
+      where: { slug },
       include: {
         genrePosterRels: {
           include: {
@@ -65,10 +65,10 @@ export const createGenre = async (req: Request, res: Response) => {
 // Opdater genre
 export const updateGenre = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { slug: slugParam } = req.params;
     const { title, slug } = req.body;
     const genre = await prisma.genre.update({
-      where: { id: parseInt(id) },
+      where: { slug: slugParam },
       data: {
         title,
         slug,
@@ -84,9 +84,9 @@ export const updateGenre = async (req: Request, res: Response) => {
 // Slet genre
 export const deleteGenre = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { slug } = req.params;
     await prisma.genre.delete({
-      where: { id: parseInt(id) },
+      where: { slug },
     });
     res.status(204).send();
   } catch (error) {

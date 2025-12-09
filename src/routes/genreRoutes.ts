@@ -4,9 +4,9 @@ import { getGenres, getGenre, createGenre, updateGenre, deleteGenre } from "../c
 const router = Router();
 
 router.get("/", getGenres);
-router.get("/:id", getGenre);
+router.get("/:slug", getGenre);
 router.post("/", createGenre);
-router.put("/:id", updateGenre);
-router.delete("/:id", deleteGenre);
+router.put("/:slug", updateGenre);
+router.delete("/:slug", deleteGenre);
 
 export const genreRoutes = router;
