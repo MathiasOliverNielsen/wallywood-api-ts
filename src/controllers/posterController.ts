@@ -45,6 +45,31 @@ export const getPoster = async (req: Request, res: Response) => {
   }
 };
 
+// Hent enkelt plakat via slug
+export const getPosterBySlug = async (req: Request, res: Response) => {
+  try {
+    const { slug } = req.params;
+    const poster = await prisma.poster.findUnique({
+      where: { slug: slug },
+      include: {
+        genrePosterRels: {
+          include: {
+            genre: true,
+          },
+        },
+        userRatings: true,
+      },
+    });
+    if (!poster) {
+      return res.status(404).json({ error: "Poster not found" });
+    }
+    res.json(poster);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch poster" });
+  }
+};
+
 // Opret plakat
 export const createPoster = async (req: Request, res: Response) => {
   try {
