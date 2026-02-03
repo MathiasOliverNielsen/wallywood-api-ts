@@ -6,6 +6,7 @@ import { genreRoutes } from "./routes/genreRoutes.js";
 import { cartlineRoutes } from "./routes/cartlineRoutes.js";
 import { ratingRoutes } from "./routes/ratingRoutes.js";
 import { loginRoutes } from "./routes/authRoutes.js";
+import cors from "cors";
 
 // Indlæs miljøvariabler fra .env (uden at vise logs)
 dotenv.config({ quiet: true });
@@ -15,6 +16,7 @@ const port = process.env.PORT || 3000;
 
 // Opret express-app
 const app = express();
+app.use(cors());
 
 // Gør det muligt at modtage JSON i requests
 app.use(express.json());

@@ -29,6 +29,7 @@
   "dependencies": {
     "@prisma/client": "6.19",
     "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
     "csv-parse": "^6.1.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
     "@types/csv-parse": "^1.1.12",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
