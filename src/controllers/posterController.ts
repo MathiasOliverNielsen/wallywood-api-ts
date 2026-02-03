@@ -1,6 +1,35 @@
 import { Request, Response } from "express";
 import { prisma } from "../prisma.js";
 
+// Hent plakater efter genre slug
+export const getPostersByGenre = async (req: Request, res: Response) => {
+  try {
+    const { genreSlug } = req.params;
+    const posters = await prisma.poster.findMany({
+      where: {
+        genrePosterRels: {
+          some: {
+            genre: {
+              slug: genreSlug,
+            },
+          },
+        },
+      },
+      include: {
+        genrePosterRels: {
+          include: {
+            genre: true,
+          },
+        },
+      },
+    });
+    res.json(posters);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch posters by genre" });
+  }
+};
+
 // Hent alle plakater
 export const getPosters = async (req: Request, res: Response) => {
   try {
