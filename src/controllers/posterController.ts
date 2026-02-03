@@ -5,6 +5,22 @@ import { prisma } from "../prisma.js";
 export const getPostersByGenre = async (req: Request, res: Response) => {
   try {
     const { genreSlug } = req.params;
+    const { limit, offset, sort } = req.query;
+
+    // Parse limit and offset
+    const limitNumber = limit ? parseInt(limit as string) : 20;
+    const offsetNumber = offset ? parseInt(offset as string) : 0;
+
+    // Build order by clause based on sort parameter
+    let orderBy: any = {};
+    if (sort === "asc") {
+      orderBy = { price: "asc" };
+    } else if (sort === "desc") {
+      orderBy = { price: "desc" };
+    } else if (sort === "name") {
+      orderBy = { name: "asc" };
+    }
+
     const posters = await prisma.poster.findMany({
       where: {
         genrePosterRels: {
@@ -22,8 +38,18 @@ export const getPostersByGenre = async (req: Request, res: Response) => {
           },
         },
       },
+      orderBy: Object.keys(orderBy).length > 0 ? orderBy : undefined,
+      take: limitNumber,
+      skip: offsetNumber,
     });
-    res.json(posters);
+
+    // Transform genrePosterRels to genres for easier frontend use
+    const transformedPosters = posters.map((poster) => ({
+      ...poster,
+      genres: poster.genrePosterRels.map((rel) => rel.genre),
+    }));
+
+    res.json(transformedPosters);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch posters by genre" });
@@ -33,6 +59,22 @@ export const getPostersByGenre = async (req: Request, res: Response) => {
 // Hent alle plakater
 export const getPosters = async (req: Request, res: Response) => {
   try {
+    const { limit, offset, sort } = req.query;
+
+    // Parse limit and offset
+    const limitNumber = limit ? parseInt(limit as string) : 20;
+    const offsetNumber = offset ? parseInt(offset as string) : 0;
+
+    // Build order by clause based on sort parameter
+    let orderBy: any = {};
+    if (sort === "asc") {
+      orderBy = { price: "asc" };
+    } else if (sort === "desc") {
+      orderBy = { price: "desc" };
+    } else if (sort === "name") {
+      orderBy = { name: "asc" };
+    }
+
     const posters = await prisma.poster.findMany({
       include: {
         genrePosterRels: {
@@ -41,8 +83,18 @@ export const getPosters = async (req: Request, res: Response) => {
           },
         },
       },
+      orderBy: Object.keys(orderBy).length > 0 ? orderBy : undefined,
+      take: limitNumber,
+      skip: offsetNumber,
     });
-    res.json(posters);
+
+    // Transform genrePosterRels to genres for easier frontend use
+    const transformedPosters = posters.map((poster) => ({
+      ...poster,
+      genres: poster.genrePosterRels.map((rel) => rel.genre),
+    }));
+
+    res.json(transformedPosters);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch posters" });

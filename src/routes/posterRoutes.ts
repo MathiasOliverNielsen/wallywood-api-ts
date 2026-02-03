@@ -4,7 +4,7 @@ import { getPosters, getPoster, getPosterBySlug, createPoster, updatePoster, del
 const router = Router();
 
 router.get("/", getPosters);
-router.get("/genre/:genreId", getPostersByGenre);
+router.get("/genre/:genreSlug", getPostersByGenre);
 router.get("/slug/:slug", getPosterBySlug);
 router.get("/:id", getPoster);
 router.post("/", createPoster);
